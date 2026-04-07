@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Kunal Kumar - AI & Full Stack Developer</title>
+    
+    <!-- Tailwind CSS (CDN for development only) -->
+    <script>
+        // Suppress Tailwind CDN warning
+        if (typeof console !== 'undefined' && console.warn) {
+            const originalWarn = console.warn;
+            console.warn = function(...args) {
+                if (args[0] && typeof args[0] === 'string' && args[0].includes('tailwindcss.com')) {
+                    return; // Suppress Tailwind CDN warning
+                }
+                originalWarn.apply(console, args);
+            };
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        /* Custom CSS for portfolio */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Loading Screen */
+        .loader-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader-content {
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .loader-code-text {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            color: #60a5fa;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .code-line {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .code-keyword {
+            color: #f472b6;
+        }
+        
+        .code-string {
+            color: #34d399;
+        }
+        
+        .loader-spinner-wrapper {
+            margin: 2rem auto;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .loader-spinner {
+            width: 100%;
+            height: 100%;
+            border: 4px solid #1e293b;
+            border-top-color: #60a5fa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loader-progress-wrapper {
+            height: 4px;
+            background: #1e293b;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        
+        .loader-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .loader-percentage {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.5rem;
+            color: #60a5fa;
+        }
+        
+        /* Header */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand-logo {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .logo-bracket {
+            color: #60a5fa;
+        }
+        
+        .logo-text {
+            color: #e2e8f0;
+            margin: 0 0.3rem;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+        }
+        
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .lang-toggle,
+        .theme-toggle,
+        .menu-toggle {
+            background: none;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-toggle:hover,
+        .theme-toggle:hover {
+            border-color: #60a5fa;
+            color: #60a5fa;
+        }
+        
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .menu-toggle span {
+            width: 20px;
+            height: 2px;
+            background: #94a3b8;
+            transition: 0.3s;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 80px;
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .hero-greeting {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .greeting-cursor {
+            color: #60a5fa;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .hero-name {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .name-prefix {
+            color: #f472b6;
+        }
+        
+        .name-operator {
+            color: #94a3b8;
+            margin: 0 0.5rem;
+        }
+        
+        .name-value {
+            color: #60a5fa;
+        }
+        
+        .name-suffix {
+            color: #94a3b8;
+        }
+        
+        .hero-title {
+            font-size: 1.8rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .title-prefix {
+            color: #64748b;
+        }
+        
+        .title-text {
+            color: #cbd5e1;
+            margin-left: 0.5rem;
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(96, 165, 250, 0.3);
+        }
+        
+        .btn-secondary {
+            border: 2px solid #60a5fa;
+            color: #60a5fa;
+            background: transparent;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .hero-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(96, 165, 250, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60a5fa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background: #60a5fa;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .hero-image-wrapper {
+            position: relative;
+        }
+        
+        .hero-image-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+        
+        .profile-image-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        .profile-image-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            padding: 8px;
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #1e293b;
+        }
+        
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            color: #60a5fa;
+            font-size: 4rem;
+        }
+        
+        .floating-badge {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            animation: float 6s ease-in-out infinite;
+            z-index: 10;
+        }
+        
+        .badge-1 {
+            top: 20px;
+            right: 0;
+            animation-delay: 0s;
+        }
+        
+        .badge-2 {
+            bottom: 50px;
+            left: 0;
+            animation-delay: 2s;
+        }
+        
+        .badge-3 {
+            bottom: 20px;
+            right: 30px;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating-badge i {
+            font-size: 1.5rem;
+            color: #60a5fa;
+        }
+        
+        .badge-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .badge-title {
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+        
+        .badge-libs {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .scroll-mouse {
+            width: 30px;
+            height: 50px;
+            border: 2px solid #60a5fa;
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .scroll-wheel {
+            width: 4px;
+            height: 10px;
+            background: #60a5fa;
+            border-radius: 2px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scroll 2s infinite;
+        }
+        
+        @keyframes scroll {
+            0% { top: 10px; opacity: 1; }
+            100% { top: 30px; opacity: 0; }
+        }
+        
+        .scroll-text {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        /* Sections */
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+        
+        .section-number {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            color: #60a5fa;
+            opacity: 0.7;
+        }
+        
+        .section-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .title-bracket {
+            color: #60a5fa;
+        }
+        
+        .title-text {
+            color: #e2e8f0;
+        }
+        
+        .section-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #60a5fa 0%, transparent 100%);
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+        
+        .about-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #cbd5e1;
+        }
+        
+        .detail-item i {
+            color: #60a5fa;
+            width: 20px;
+        }
+        
+        .about-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #60a5fa;
+            font-family: 'Fira Code', monospace;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .about-image-container {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .code-block {
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+        
+        .code-line {
+            margin-bottom: 0.5rem;
+        }
+        
+        .indent {
+            padding-left: 2rem;
+        }
+        
+        .code-property {
+            color: #60a5fa;
+        }
+        
+        .code-comma,
+        .code-semicolon {
+            color: #94a3b8;
+        }
+        
+        .code-brace,
+        .code-bracket {
+            color: #f472b6;
+        }
+        
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .skill-category {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+        }
+        
+        .category-title {
+            color: #e2e8f0;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+        }
+        
+        .skill-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .skill-item {
+            position: relative;
+        }
+        
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .skill-name {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+        
+        .skill-percent {
+            color: #60a5fa;
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+        }
+        
+        .skill-bar {
+            height: 8px;
+            background: rgba(96, 165, 250, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 1.5s ease-in-out;
+        }
+        
+        /* Experience Section */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #60a5fa 0%, transparent 100%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 80px;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #60a5fa;
+            background: #0f172a;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            position: relative;
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .timeline-year {
+            color: #60a5fa;
+            font-weight: 600;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .timeline-badge {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .timeline-title {
+            color: #e2e8f0;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-company {
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .timeline-description {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .timeline-achievements {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #cbd5e1;
+        }
+        
+        .achievement-item i {
+            color: #34d399;
+        }
+        
+        .timeline-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .tag {
+            background: rgba(96, 165, 250, 0.1);
+            color: #60a5fa;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .project-card {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .project-image {
+            height: 200px;
+            background: #1e293b;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .project-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #60a5fa;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .project-link:hover {
+            transform: scale(1.1);
+        }
+        
+        .project-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #60a5fa;
+        }
+        
+        .project-content {
+            padding: 1.5rem;
+        }
+        
+        .project-title {
+            color: #e2e8f0;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .project-description {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(96, 165, 250, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60a5fa;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .contact-details {
+            flex: 1;
+        }
+        
+        .contact-label {
+            color: #cbd5e1;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-value {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-value:hover {
+            color: #3b82f6;
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #64748b;
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .btn-submit {
+            align-self: flex-start;
+            padding: 1rem 3rem;
+        }
+        
+        /* Footer */
+        .main-footer {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            border-top: 1px solid rgba(96, 165, 250, 0.2);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .footer-text {
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .footer-divider {
+            color: #64748b;
+        }
+        
+        .footer-author {
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-author-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #60a5fa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-author-link:hover {
+            color: #3b82f6;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .footer-social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(96, 165, 250, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60a5fa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-social-link:hover {
+            background: #60a5fa;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+            
+            .hero-description {
+                margin: 0 auto 2rem;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-social {
+                justify-content: center;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all 0.3s ease;
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .hero-name {
+                font-size: 2.5rem;
+            }
+            
+            .hero-title {
+                font-size: 1.4rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                padding-left: 60px;
+            }
+            
+            .timeline-marker {
+                left: 10px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+            
+            .about-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .hero-image-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .profile-image-frame {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .floating-badge {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body class="body-main" data-theme="dark" data-lang="en" data-dir="ltr">
+    
+    <!-- Loading Screen -->
+    <div class="loader-screen" id="loader">
+        <div class="loader-content">
+            <div class="loader-code-text">
+                <div class="code-line" data-line="1">const portfolio = {</div>
+                <div class="code-line" data-line="2">  name: 'Kunal Kumar',</div>
+                <div class="code-line" data-line="3">  ai_assistant: 'Miya',</div>
+                <div class="code-line" data-line="4">  year: 2026,</div>
+                <div class="code-line" data-line="5">  status: 'initializing...'</div>
+                <div class="code-line" data-line="6">};</div>
+            </div>
+            <div class="loader-spinner-wrapper">
+                <div class="loader-spinner"></div>
+            </div>
+            <div class="loader-progress-wrapper">
+                <div class="loader-progress-bar"></div>
+            </div>
+            <div class="loader-percentage" id="loaderPercent">0%</div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="main-header" id="header">
+        <nav class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-logo">
+                    <span class="logo-bracket">&lt;</span>
+                    <span class="logo-text">KK</span>
+                    <span class="logo-bracket">/&gt;</span>
+                </div>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active" data-section="home">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text" data-text-en="Home" data-text-ar="الرئيسية">Home</span>
+                </a>
+                <a href="#about" class="nav-link" data-section="about">
+                    <i class="fas fa-user"></i>
+                    <span class="nav-text" data-text-en="About" data-text-ar="عني">About</span>
+                </a>
+                <a href="#skills" class="nav-link" data-section="skills">
+                    <i class="fas fa-code"></i>
+                    <span class="nav-text" data-text-en="Skills" data-text-ar="المهارات">Skills</span>
+                </a>
+                <a href="#experience" class="nav-link" data-section="experience">
+                    <i class="fas fa-briefcase"></i>
+                    <span class="nav-text" data-text-en="Experience" data-text-ar="الخبرة">Experience</span>
+                </a>
+                <a href="#projects" class="nav-link" data-section="projects">
+                    <i class="fas fa-rocket"></i>
+                    <span class="nav-text" data-text-en="Projects" data-text-ar="المشاريع">Projects</span>
+                </a>
+                <a href="#contact" class="nav-link" data-section="contact">
+                    <i class="fas fa-envelope"></i>
+                    <span class="nav-text" data-text-en="Contact" data-text-ar="التواصل">Contact</span>
+                </a>
+            </div>
+            
+            <div class="nav-controls">
+                <button class="lang-toggle" id="langToggle" title="Toggle Language">
+                    <i class="fas fa-language"></i>
+                    <span class="lang-text">AR</span>
+                </button>
+                <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle" title="Toggle Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="hero-background">
+                <div class="code-grid-bg"></div>
+            </div>
+            
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="hero-greeting">
+                        <span class="greeting-text" data-text-en="Hello, I'm" data-text-ar="مرحباً، أنا">Hello, I'm</span>
+                        <span class="greeting-cursor">|</span>
+                    </div>
+                    
+                    <h1 class="hero-name" id="heroName">
+                        <span class="name-prefix">const</span>
+                        <span class="name-operator">=</span>
+                        <span class="name-value">Kunal Kumar</span>
+                        <span class="name-suffix">;</span>
+                    </h1>
+                    
+                    <div class="hero-title">
+                        <span class="title-prefix">//</span>
+                        <span class="title-text" data-text-en="AI Developer | Full Stack Developer | Creator of Miya AI Assistant" data-text-ar="مطور الذكاء الاصطناعي | مطور Full Stack | مبتكر مساعد MIYA الذكي">AI Developer | Full Stack Developer | Creator of Miya AI Assistant</span>
+                    </div>
+                    
+                    <p class="hero-description" data-text-en="Creator of Miya AI Assistant | Building intelligent solutions with Python, AI/ML, and modern web technologies. Expert in developing websites, games, and cutting-edge AI applications." data-text-ar="مبتكر مساعد MIYA الذكي | بناء حلول ذكية باستخدام Python، الذكاء الاصطناعي وتقنيات الويب الحديثة. خبير في تطوير المواقع الإلكترونية، الألعاب، وتطبيقات الذكاء الاصطناعي المتطورة.">
+                        Creator of Miya AI Assistant | Building intelligent solutions with Python, AI/ML, and modern web technologies. Expert in developing websites, games, and cutting-edge AI applications.
+                    </p>
+                    
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn btn-primary">
+                            <span data-text-en="Get In Touch" data-text-ar="تواصل معي">Get In Touch</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#projects" class="btn btn-secondary">
+                            <span data-text-en="View Projects" data-text-ar="عرض المشاريع">View Projects</span>
+                            <i class="fas fa-code"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="hero-social">
+                        <a href="https://github.com/kunalkumar" class="social-icon" title="GitHub" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/kunal-kumar" class="social-icon" title="LinkedIn" target="_blank">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://twitter.com/kunalkumar" class="social-icon" title="Twitter" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="Miya AI Assistant">
+                            <i class="fas fa-robot"></i>
+                        </a>
+                        <a href="mailto:kunulabh123@gmail.com" class="social-icon" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hero-image-wrapper">
+                    <div class="hero-image-container">
+                        <div class="profile-image-glow"></div>
+                        <div class="profile-image-frame">
+                            <div class="profile-image" id="profileImage">
+                                <!-- Your Photo -->
+                                <img src="https://i.ibb.co/b5YdB6qL/Whats-App-Image-2025-06-03-at-16-31-35-5d1a3c7b.jpg" alt="Kunal Kumar - AI & Full Stack Developer">
+                            </div>
+                        </div>
+                        <div class="floating-badge badge-1">
+                            <i class="fas fa-robot"></i>
+                            <div class="badge-content">
+                                <span class="badge-title">Miya AI</span>
+                                <span class="badge-libs">Personal AI Assistant</span>
+                            </div>
+                        </div>
+                        <div class="floating-badge badge-2">
+                            <i class="fab fa-python"></i>
+                            <div class="badge-content">
+                                <span class="badge-title">Python</span>
+                                <span class="badge-libs">Django, Flask, AI/ML</span>
+                            </div>
+                        </div>
+                        <div class="floating-badge badge-3">
+                            <i class="fas fa-gamepad"></i>
+                            <div class="badge-content">
+                                <span class="badge-title">Game Dev</span>
+                                <span class="badge-libs">PyGame, Web Games</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">
+                <div class="scroll-mouse">
+                    <div class="scroll-wheel"></div>
+                </div>
+                <span class="scroll-text" data-text-en="Scroll Down" data-text-ar="انتقل للأسفل">Scroll Down</span>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section about-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-number">01</span>
+                    <h2 class="section-title">
+                        <span class="title-bracket">&lt;</span>
+                        <span class="title-text" data-text-en="About Me" data-text-ar="عني">About Me</span>
+                        <span class="title-bracket">/&gt;</span>
+                    </h2>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="about-content">
+                    <div class="about-text-wrapper">
+                        <div class="about-intro">
+                            <p class="about-text" data-text-en="I'm a passionate AI and Full Stack Developer with 1.5 years of experience in building intelligent solutions, websites, and games. I'm the creator of Miya - my personal AI assistant that helps with automation, data analysis, and intelligent task management. I specialize in Python-based AI development, web applications, and game development." data-text-ar="أنا مطور ذكاء اصطناعي و Full Stack شغوف مع 1.5 سنوات من الخبرة في بناء الحلول الذكية، المواقع الإلكترونية، والألعاب. أنا مبتكر Miya - مساعدي الذكي الشخصي الذي يساعد في الأتمتة، تحليل البيانات، وإدارة المهام الذكية. أتخصص في تطوير الذكاء الاصطناعي باستخدام Python، تطبيقات الويب، وتطوير الألعاب.">
+                                I'm a passionate AI and Full Stack Developer with 1.5 years of experience in building intelligent solutions, websites, and games. I'm the creator of Miya - my personal AI assistant that helps with automation, data analysis, and intelligent task management. I specialize in Python-based AI development, web applications, and game development.
+                            </p>
+                            <div class="about-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span><strong>Location:</strong> Forbisganj, Araria, Bihar 854318</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-home"></i>
+                                    <span><strong>Hometown:</strong> Patna, Bihar</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-robot"></i>
+                                    <span><strong>AI Assistant:</strong> Miya - Personal AI Assistant</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-code"></i>
+                                    <span><strong>Specialties:</strong> AI Development, Websites, Games</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="about-stats">
+                            <div class="stat-item">
+                                <div class="stat-number" data-count="45">0</div>
+                                <div class="stat-label" data-text-en="Projects" data-text-ar="مشروع">Projects</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" data-count="1.5">0</div>
+                                <div class="stat-label" data-text-en="Years Experience" data-text-ar="سنوات خبرة">Years Experience</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" data-count="25">0</div>
+                                <div class="stat-label" data-text-en="AI Solutions" data-text-ar="حل ذكاء اصطناعي">AI Solutions</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="about-image-wrapper">
+                        <div class="about-image-container">
+                            <div class="code-block">
+                                <div class="code-line">
+                                    <span class="code-keyword">const</span>
+                                    <span class="code-variable">developer</span>
+                                    <span class="code-operator">=</span>
+                                    <span class="code-brace">{</span>
+                                </div>
+                                <div class="code-line indent">
+                                    <span class="code-property">name</span>
+                                    <span class="code-operator">:</span>
+                                    <span class="code-string">'Kunal Kumar'</span>
+                                    <span class="code-comma">,</span>
+                                </div>
+                                <div class="code-line indent">
+                                    <span class="code-property">year</span>
+                                    <span class="code-operator">:</span>
+                                    <span class="code-number">2026</span>
+                                    <span class="code-comma">,</span>
+                                </div>
+                                <div class="code-line indent">
+                                    <span class="code-property">ai_assistant</span>
+                                    <span class="code-operator">:</span>
+                                    <span class="code-string">'Miya'</span>
+                                    <span class="code-comma">,</span>
+                                </div>
+                                <div class="code-line indent">
+                                    <span class="code-property">specialization</span>
+                                    <span class="code-operator">:</span>
+                                    <span class="code-bracket">[</span>
+                                    <span class="code-string">'AI Development'</span>
+                                    <span class="code-comma">,</span>
+                                    <span class="code-string">'Websites'</span>
+                                    <span class="code-comma">,</span>
+                                    <span class="code-string">'Games'</span>
+                                    <span class="code-bracket">]</span>
+                                    <span class="code-comma">,</span>
+                                </div>
+                                <div class="code-line indent">
+                                    <span class="code-property">experience</span>
+                                    <span class="code-operator">:</span>
+                                    <span class="code-number">1.5</span>
+                                    <span class="code-comma">,</span>
+                                </div>
+                                <div class="code-line indent">
+                                    <span class="code-property">projects</span>
+                                    <span class="code-operator">:</span>
+                                    <span class="code-number">45</span>
+                                </div>
+                                <div class="code-line">
+                                    <span class="code-brace">}</span>
+                                    <span class="code-semicolon">;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section skills-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-number">02</span>
+                    <h2 class="section-title">
+                        <span class="title-bracket">&lt;</span>
+                        <span class="title-text" data-text-en="Skills & Expertise (2024-2026)" data-text-ar="المهارات والخبرة (2024-2026)">Skills & Expertise (2024-2026)</span>
+                        <span class="title-bracket">/&gt;</span>
+                    </h2>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3 class="category-title" data-text-en="AI & Machine Learning" data-text-ar="الذكاء الاصطناعي والتعلم الآلي">AI & Machine Learning</h3>
+                        <div class="skill-items">
+                            <div class="skill-item" data-skill="Miya AI Assistant" data-percent="95">
+                                <div class="skill-header">
+                                    <span class="skill-name">Miya AI Assistant</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="Python AI" data-percent="92">
+                                <div class="skill-header">
+                                    <span class="skill-name">Python AI</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="Machine Learning" data-percent="88">
+                                <div class="skill-header">
+                                    <span class="skill-name">Machine Learning</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="Chatbots/NLP" data-percent="90">
+                                <div class="skill-header">
+                                    <span class="skill-name">Chatbots/NLP</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3 class="category-title" data-text-en="Web Development" data-text-ar="تطوير الويب">Web Development</h3>
+                        <div class="skill-items">
+                            <div class="skill-item" data-skill="React.js" data-percent="90">
+                                <div class="skill-header">
+                                    <span class="skill-name">React.js</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="Node.js" data-percent="88">
+                                <div class="skill-header">
+                                    <span class="skill-name">Node.js</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="JavaScript" data-percent="95">
+                                <div class="skill-header">
+                                    <span class="skill-name">JavaScript</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="Full Stack" data-percent="92">
+                                <div class="skill-header">
+                                    <span class="skill-name">Full Stack</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3 class="category-title" data-text-en="Game & App Development" data-text-ar="تطوير الألعاب والتطبيقات">Game & App Development</h3>
+                        <div class="skill-items">
+                            <div class="skill-item" data-skill="Python Games" data-percent="85">
+                                <div class="skill-header">
+                                    <span class="skill-name">Python Games</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="Web Games" data-percent="82">
+                                <div class="skill-header">
+                                    <span class="skill-name">Web Games</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="Mobile Apps" data-percent="78">
+                                <div class="skill-header">
+                                    <span class="skill-name">Mobile Apps</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" data-skill="Desktop Apps" data-percent="80">
+                                <div class="skill-header">
+                                    <span class="skill-name">Desktop Apps</span>
+                                    <span class="skill-percent">0%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="section experience-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-number">03</span>
+                    <h2 class="section-title">
+                        <span class="title-bracket">&lt;</span>
+                        <span class="title-text" data-text-en="Experience Timeline" data-text-ar="الخبرة الزمنية">Experience Timeline</span>
+                        <span class="title-bracket">/&gt;</span>
+                    </h2>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <div class="timeline-year">2024 - Present (2026)</div>
+                                <div class="timeline-badge">Current</div>
+                            </div>
+                            <h3 class="timeline-title" data-text-en="AI Developer & Full Stack Specialist" data-text-ar="مطور الذكاء الاصطناعي وأخصائي Full Stack">AI Developer & Full Stack Specialist</h3>
+                            <div class="timeline-company">
+                                <i class="fas fa-building"></i>
+                                Freelance & Personal Projects
+                            </div>
+                            <p class="timeline-description" data-text-en="Developing Miya AI Assistant - a personal AI assistant for automation, data analysis, and intelligent task management. Creating websites, web applications, and games using modern technologies. Building AI-powered solutions for various clients and personal projects." data-text-ar="تطوير مساعد Miya الذكي - مساعد ذكاء اصطناعي شخصي للأتمتة، تحليل البيانات، وإدارة المهام الذكية. إنشاء مواقع إلكترونية، تطبيقات ويب، وألعاب باستخدام التقنيات الحديثة. بناء حلول مدعومة بالذكاء الاصطناعي لعملاء مختلفين ومشاريع شخصية.">
+                                Developing Miya AI Assistant - a personal AI assistant for automation, data analysis, and intelligent task management. Creating websites, web applications, and games using modern technologies. Building AI-powered solutions for various clients and personal projects.
+                            </p>
+                            <div class="timeline-achievements">
+                                <div class="achievement-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-text-en="Created Miya AI Assistant" data-text-ar="إنشاء مساعد Miya الذكي">Created Miya AI Assistant</span>
+                                </div>
+                                <div class="achievement-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-text-en="Built 25+ AI solutions" data-text-ar="بناء أكثر من 25 حل ذكاء اصطناعي">Built 25+ AI solutions</span>
+                                </div>
+                                <div class="achievement-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-text-en="Developed 20+ websites" data-text-ar="تطوير أكثر من 20 موقع إلكتروني">Developed 20+ websites</span>
+                                </div>
+                                <div class="achievement-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-text-en="Created 10+ games" data-text-ar="إنشاء أكثر من 10 ألعاب">Created 10+ games</span>
+                                </div>
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="tag">Miya AI</span>
+                                <span class="tag">Python</span>
+                                <span class="tag">React</span>
+                                <span class="tag">Node.js</span>
+                                <span class="tag">Game Dev</span>
+                                <span class="tag">Web Dev</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <div class="timeline-year">2024</div>
+                            </div>
+                            <h3 class="timeline-title" data-text-en="Full Stack Developer" data-text-ar="مطور Full Stack">Full Stack Developer</h3>
+                            <div class="timeline-company">
+                                <i class="fas fa-building"></i>
+                                Tech Solutions Ltd.
+                            </div>
+                            <p class="timeline-description" data-text-en="Worked on full-stack web development projects. Developed responsive websites and web applications. Gained experience in frontend and backend technologies. Started exploring AI and machine learning concepts." data-text-ar="العمل على مشاريع تطوير ويب كاملة. تطوير مواقع إلكترونية وتطبيقات ويب سريعة الاستجابة. اكتساب خبرة في تقنيات الواجهة الأمامية والخلفية. بدء استكشاف مفاهيم الذكاء الاصطناعي والتعلم الآلي.">
+                                Worked on full-stack web development projects. Developed responsive websites and web applications. Gained experience in frontend and backend technologies. Started exploring AI and machine learning concepts.
+                            </p>
+                            <div class="timeline-achievements">
+                                <div class="achievement-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-text-en="Built 15+ websites" data-text-ar="بناء أكثر من 15 موقع إلكتروني">Built 15+ websites</span>
+                                </div>
+                                <div class="achievement-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-text-en">Learned AI basics" data-text-ar="تعلم أساسيات الذكاء الاصطناعي">Learned AI basics</span>
+                                </div>
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="tag">HTML/CSS</span>
+                                <span class="tag">JavaScript</span>
+                                <span class="tag">React</span>
+                                <span class="tag">Node.js</span>
+                                <span class="tag">MongoDB</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <div class="timeline-year">2024</div>
+                            </div>
+                            <h3 class="timeline-title" data-text-en="Python Developer" data-text-ar="مطور Python">Python Developer</h3>
+                            <div class="timeline-company">
+                                <i class="fas fa-building"></i>
+                                Code Masters
+                            </div>
+                            <p class="timeline-description" data-text-en="Started Python development journey. Worked on automation scripts, data processing, and basic applications. Developed initial version of Miya AI Assistant prototype. Created simple games and applications using Python." data-text-ar="بدء رحلة تطوير Python. العمل على نصوص الأتمتة، معالجة البيانات، والتطبيقات الأساسية. تطوير النسخة الأولية من نموذج مساعد Miya الذكي. إنشاء ألعاب وتطبيقات بسيطة باستخدام Python.">
+                                Started Python development journey. Worked on automation scripts, data processing, and basic applications. Developed initial version of Miya AI Assistant prototype. Created simple games and applications using Python.
+                            </p>
+                            <div class="timeline-achievements">
+                                <div class="achievement-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-text-en="Created Miya prototype" data-text-ar="إنشاء نموذج Miya الأولي">Created Miya prototype</span>
+                                </div>
+                                <div class="achievement-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-text-en">Built 5+ Python games" data-text-ar="بناء أكثر من 5 ألعاب Python">Built 5+ Python games</span>
+                                </div>
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">Automation</span>
+                                <span class="tag">Game Dev</span>
+                                <span class="tag">Miya AI</span>
+                                <span class="tag">Scripting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section projects-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-number">04</span>
+                    <h2 class="section-title">
+                        <span class="title-bracket">&lt;</span>
+                        <span class="title-text" data-text-en="Projects (45+ Completed)" data-text-ar="المشاريع (اكتمل 45+)">Projects (45+ Completed)</span>
+                        <span class="title-bracket">/&gt;</span>
+                    </h2>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#" class="project-link" title="View Project">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                    <a href="#" class="project-link" title="View Code">
+                                        <i class="fab fa-github"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="project-placeholder">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title" data-text-en="Miya AI Assistant" data-text-ar="مساعد Miya الذكي">Miya AI Assistant</h3>
+                            <p class="project-description" data-text-en="Personal AI assistant for automation, task management, data analysis, and intelligent decision making with voice recognition and NLP capabilities." data-text-ar="مساعد ذكاء اصطناعي شخصي للأتمتة، إدارة المهام، تحليل البيانات، واتخاذ القرارات الذكية مع قدرات التعرف على الصوت ومعالجة اللغة الطبيعية.">
+                                Personal AI assistant for automation, task management, data analysis, and intelligent decision making with voice recognition and NLP capabilities.
+                            </p>
+                            <div class="project-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">AI</span>
+                                <span class="tag">NLP</span>
+                                <span class="tag">Automation</span>
+                                <span class="tag">Miya</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-image">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#" class="project-link" title="View Project">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                    <a href="#" class="project-link" title="View Code">
+                                        <i class="fab fa-github"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="project-placeholder">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title" data-text-en="Python Game Collection" data-text-ar="مجموعة ألعاب Python">Python Game Collection</h3>
+                            <p class="project-description" data-text-en="Collection of 10+ Python games including puzzle games, arcade games, and educational games built with PyGame and custom game engines." data-text-ar="مجموعة من 10+ ألعاب Python تشمل ألعاب الألغاز، ألعاب الأركيد، والألعاب التعليمية المبنية باستخدام PyGame ومحركات ألعاب مخصصة.">
+                                Collection of 10+ Python games including puzzle games, arcade games, and educational games built with PyGame and custom game engines.
+                            </p>
+                            <div class="project-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">PyGame</span>
+                                <span class="tag">Game Dev</span>
+                                <span class="tag">Arcade</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-image">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#" class="project-link" title="View Project">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                    <a href="#" class="project-link" title="View Code">
+                                        <i class="fab fa-github"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="project-placeholder">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title" data-text-en="Web Development Portfolio" data-text-ar="محفظة تطوير الويب">Web Development Portfolio</h3>
+                            <p class="project-description" data-text-en="Collection of 20+ websites and web applications including e-commerce platforms, blogs, business websites, and interactive web applications." data-text-ar="مجموعة من 20+ موقع إلكتروني وتطبيق ويب تشمل منصات التجارة الإلكترونية، المدونات، مواقع الأعمال، وتطبيقات الويب التفاعلية.">
+                                Collection of 20+ websites and web applications including e-commerce platforms, blogs, business websites, and interactive web applications.
+                            </p>
+                            <div class="project-tags">
+                                <span class="tag">React</span>
+                                <span class="tag">Node.js</span>
+                                <span class="tag">JavaScript</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">HTML</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section contact-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-number">05</span>
+                    <h2 class="section-title">
+                        <span class="title-bracket">&lt;</span>
+                        <span class="title-text" data-text-en="Contact Me" data-text-ar="تواصل معي">Contact Me</span>
+                        <span class="title-bracket">/&gt;</span>
+                    </h2>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4 class="contact-label" data-text-en="Email" data-text-ar="البريد الإلكتروني">Email</h4>
+                                <a href="mailto:kunulabh123@gmail.com" class="contact-value">kunulabh123@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4 class="contact-label" data-text-en="Phone" data-text-ar="الهاتف">Phone</h4>
+                                <a href="tel:+917079932891" class="contact-value">+91 70799 32891</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4 class="contact-label" data-text-en="Location" data-text-ar="الموقع">Location</h4>
+                                <span class="contact-value" data-text-en="Forbisganj, Araria, Bihar 854318" data-text-ar="فوربيسجانج، أراريا، بيهار 854318">Forbisganj, Araria, Bihar 854318</span>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4 class="contact-label" data-text-en="AI Assistant" data-text-ar="المساعد الذكي">AI Assistant</h4>
+                                <span class="contact-value" data-text-en="Miya - Personal AI Assistant" data-text-ar="Miya - المساعد الذكي الشخصي">Miya - Personal AI Assistant</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Name" data-placeholder-en="Name" data-placeholder-ar="الاسم" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" placeholder="Email" data-placeholder-en="Email" data-placeholder-ar="البريد الإلكتروني" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Subject" data-placeholder-en="Subject" data-placeholder-ar="الموضوع" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-input form-textarea" rows="5" placeholder="Message" data-placeholder-en="Message" data-placeholder-ar="الرسالة" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit">
+                            <span data-text-en="Send Message" data-text-ar="إرسال الرسالة">Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-text-wrapper">
+                    <p class="footer-text">
+                        <span class="footer-copyright">© 2026 Kunal Kumar Portfolio</span>
+                        <span class="footer-divider">•</span>
+                        <span class="footer-built">Creator of Miya AI Assistant</span>
+                    </p>
+                    <p class="footer-author">
+                        <span class="footer-by-text" data-text-en="by" data-text-ar="بواسطة">by</span>
+                        <a href="#" class="footer-author-link">
+                            <i class="fas fa-code"></i>
+                            <span>Kunal Kumar</span>
+                        </a>
+                    </p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://www.linkedin.com/in/kunal-kumar" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/kunalkumar" class="footer-social-link" title="GitHub" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://twitter.com/kunalkumar" class="footer-social-link" title="Twitter" target="_blank">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="footer-social-link" title="Miya AI Assistant">
+                        <i class="fas fa-robot"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Loading Screen
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('loader');
+            const loaderPercent = document.getElementById('loaderPercent');
+            const loaderBar = document.querySelector('.loader-progress-bar');
+            const codeLines = document.querySelectorAll('.code-line');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress > 100) progress = 100;
+                
+                loaderPercent.textContent = Math.floor(progress) + '%';
+                loaderBar.style.width = progress + '%';
+                
+                // Show code lines sequentially
+                codeLines.forEach((line, index) => {
+                    if (progress > (index + 1) * 15) {
+                        line.style.opacity = '1';
+                        line.style.transform = 'translateY(0)';
+                    }
+                });
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loader.style.opacity = '0';
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                            initPortfolio();
+                        }, 500);
+                    }, 500);
+                }
+            }, 100);
+        });
+        
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        menuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+        
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    navMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Active Navigation Link on Scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        function setActiveLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', setActiveLink);
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            
+            // Save theme preference
+            localStorage.setItem('portfolio-theme', newTheme);
+        });
+        
+        // Check for saved theme
+        const savedTheme = localStorage.getItem('portfolio-theme');
+        if (savedTheme) {
+            body.setAttribute('data-theme', savedTheme);
+            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        }
+        
+        // Language Toggle
+        const langToggle = document.getElementById('langToggle');
+        const langText = langToggle.querySelector('.lang-text');
+        
+        langToggle.addEventListener('click', function() {
+            const currentLang = body.getAttribute('data-lang');
+            const newLang = currentLang === 'en' ? 'ar' : 'en';
+            const newDir = newLang === 'ar' ? 'rtl' : 'ltr';
+            
+            body.setAttribute('data-lang', newLang);
+            body.setAttribute('data-dir', newDir);
+            langText.textContent = newLang === 'en' ? 'AR' : 'EN';
+            
+            // Update all text elements
+            updateTextLanguage(newLang);
+            
+            // Save language preference
+            localStorage.setItem('portfolio-lang', newLang);
+        });
+        
+        function updateTextLanguage(lang) {
+            document.querySelectorAll('[data-text-en]').forEach(element => {
+                if (lang === 'en') {
+                    element.textContent = element.getAttribute('data-text-en');
+                } else {
+                    element.textContent = element.getAttribute('data-text-ar');
+                }
+            });
+            
+            document.querySelectorAll('[data-placeholder-en]').forEach(element => {
+                if (lang === 'en') {
+                    element.placeholder = element.getAttribute('data-placeholder-en');
+                } else {
+                    element.placeholder = element.getAttribute('data-placeholder-ar');
+                }
+            });
+        }
+        
+        // Check for saved language
+        const savedLang = localStorage.getItem('portfolio-lang');
+        if (savedLang) {
+            body.setAttribute('data-lang', savedLang);
+            const dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+            body.setAttribute('data-dir', dir);
+            langText.textContent = savedLang === 'en' ? 'AR' : 'EN';
+            updateTextLanguage(savedLang);
+        }
+        
+        // Animate Skill Bars on Scroll
+        function animateSkillBars() {
+            const skillItems = document.querySelectorAll('.skill-item');
+            
+            skillItems.forEach(item => {
+                const skillPercent = item.getAttribute('data-percent');
+                const skillProgress = item.querySelector('.skill-progress');
+                const skillPercentText = item.querySelector('.skill-percent');
+                
+                // Check if element is in viewport
+                const rect = item.getBoundingClientRect();
+                const isInViewport = rect.top <= window.innerHeight && rect.bottom >= 0;
+                
+                if (isInViewport && !item.classList.contains('animated')) {
+                    item.classList.add('animated');
+                    
+                    // Animate progress bar
+                    skillProgress.style.width = skillPercent + '%';
+                    
+                    // Animate percentage counter
+                    let currentPercent = 0;
+                    const interval = setInterval(() => {
+                        if (currentPercent >= skillPercent) {
+                            clearInterval(interval);
+                        } else {
+                            currentPercent++;
+                            skillPercentText.textContent = currentPercent + '%';
+                        }
+                    }, 20);
+                }
+            });
+        }
+        
+        // Animate Stats Counter
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            statNumbers.forEach(stat => {
+                const target = parseFloat(stat.getAttribute('data-count'));
+                const isDecimal = target % 1 !== 0;
+                
+                // Check if element is in viewport
+                const rect = stat.closest('.about-section').getBoundingClientRect();
+                const isInViewport = rect.top <= window.innerHeight && rect.bottom >= 0;
+                
+                if (isInViewport && !stat.classList.contains('animated')) {
+                    stat.classList.add('animated');
+                    
+                    let current = 0;
+                    const increment = target / 30; // Adjust speed
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+                        
+                        if (isDecimal) {
+                            stat.textContent = current.toFixed(1);
+                        } else {
+                            stat.textContent = Math.floor(current);
+                        }
+                    }, 30);
+                }
+            });
+        }
+        
+        // Contact Form Submission
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const formData = new FormData(this);
+                const formValues = Object.fromEntries(formData);
+                
+                // Here you would typically send the data to a server
+                console.log('Form submitted:', formValues);
+                
+                // Show success message
+                alert('Thank you for your message! I will get back to you soon.');
+                this.reset();
+            });
+        }
+        
+        // Initialize portfolio animations
+        function initPortfolio() {
+            // Animate name typing effect
+            const heroName = document.getElementById('heroName');
+            heroName.style.animation = 'none';
+            setTimeout(() => {
+                heroName.style.animation = 'fadeInUp 1s ease forwards';
+            }, 100);
+            
+            // Start scroll animations
+            window.addEventListener('scroll', () => {
+                animateSkillBars();
+                animateStats();
+                setActiveLink();
+            });
+            
+            // Trigger initial animations
+            animateSkillBars();
+            animateStats();
+        }
+    </script>
+</body>
+</html>
